@@ -4,11 +4,19 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var mysql = require('mysql');
+var connection = require('express-myconnection');
 
 var app = express();
+
+app.use(connection(mysql, {
+    host: 'localhost',
+    user: 'root',
+    password: 'squid2009',
+    database: 'coppia'
+}, 'request'));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
