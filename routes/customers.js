@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 
-// GET INTERVIEWS
+// GET CUSTOMERS
 router.get('/', function(req, res, next) {
     try {
         req.getConnection(function(err, conn) {
@@ -10,7 +10,7 @@ router.get('/', function(req, res, next) {
                 return next(err);
             }
             else {
-                conn.query('SELECT id, title, notes, create_user, create_datetime, update_user, update_datetime FROM interviews', function(err, rows, fields) {
+                conn.query('SELECT id, first_name, last_name, email, image_link, create_user, create_datetime, update_user, update_datetime FROM customers', function(err, rows, fields) {
                     if (err) {
                         console.error('SQL Error: ', err);
                         return next(err);
@@ -26,10 +26,10 @@ router.get('/', function(req, res, next) {
     }
 });
 
-// GET INTERVIEW BY interview_id
-router.get('/:interview_id', function(req, res, next) {
+// GET CUSTOMERS BY :id
+router.get('/:customer_id', function(req, res, next) {
     try {
-        var interviewId = req.param('interview_id');
+        var customerId = req.param('customer_id');
 
         req.getConnection(function(err, conn) {
             if (err) {
@@ -37,7 +37,7 @@ router.get('/:interview_id', function(req, res, next) {
                 return next(err);
             }
             else {
-                conn.query('SELECT id, title, notes, create_user, create_datetime, update_user, update_datetime FROM interviews WHERE id = ?', interviewId, function(err, rows, fields) {
+                conn.query('SELECT id, first_name, last_name, email, image_link, create_user, create_datetime, update_user, update_datetime FROM customers WHERE id = ?', customerId, function(err, rows, fields) {
                     if (err) {
                         console.error('SQL Error: ', err);
                         return next(err);
@@ -53,7 +53,7 @@ router.get('/:interview_id', function(req, res, next) {
     }
 });
 
-// CREATE INTERVIEW
+// CREATE CUSTOMER
 router.post('/', function(req, res, next) {
     try {
         var reqObj = req.body;
@@ -64,10 +64,12 @@ router.post('/', function(req, res, next) {
                 return next(err);
             }
             else {
-                var insertSql = "INSERT INTO interviews SET ?";
+                var insertSql = "INSERT INTO customers SET ?";
                 var insertValues = {
-                    "title" : reqObj.title,
-                    "notes" : reqObj.notes,
+                    "first_name" : reqObj.first_name,
+                    "last_name" : reqObj.last_name,
+                    "email" : reqObj.email,
+                    "image_link" : reqObj.image_link,
                     "create_user" : reqObj.create_user,
                     "update_user" : reqObj.create_user
                 };
@@ -78,8 +80,8 @@ router.post('/', function(req, res, next) {
                         return next(err);
                     }
                     console.log(result);
-                    var InterviewId = result.insertId;
-                    res.json({"InterviewId":InterviewId});
+                    var CustomerId = result.insertId;
+                    res.json({"CustomerId":CustomerId});
                 });
             }
         });

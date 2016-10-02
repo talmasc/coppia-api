@@ -8,6 +8,8 @@ var routes = require('./routes/index');
 var users = require('./routes/users');
 var ideas = require('./routes/ideas');
 var interviews = require('./routes/interviews');
+var snippets = require('./routes/snippets');
+var customers = require('./routes/customers');
 var mysql = require('mysql');
 var connection = require('express-myconnection');
 
@@ -36,6 +38,8 @@ app.use('/', routes);
 app.use('/api/users', users);
 app.use('/api/ideas', ideas);
 app.use('/api/interviews', interviews);
+app.use('/api/snippets', snippets);
+app.use('/api/customers', customers);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
