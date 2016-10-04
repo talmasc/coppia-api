@@ -90,4 +90,39 @@ router.post('/', function(req, res, next) {
     }
 });
 
+// CREATE INTERVIEW CUSTOMER
+router.post('/interview_customer/', function(req, res, next) {
+    try {
+        var reqObj = req.body;
+        console.log(reqObj);
+        req.getConnection(function(err, conn) {
+            if (err) {
+                console.error('SQL Connection Error: ', err);
+                return next(err);
+            }
+            else {
+                var insertSql = "INSERT INTO interview_customer SET ?";
+                var insertValues = {
+                    "interview_id" : reqObj.interview_id,
+                    "customer_id" : reqObj.customer_id
+                };
+
+                var query = conn.query(insertSql, insertValues, function(err, result) {
+                    if (err) {
+                        console.error('SQL Error: ', err);
+                        return next(err);
+                    }
+                    console.log(result);
+                    var InterviewCustomerId = result.insertId;
+                    res.json({"InterviewCustomerId":InterviewCustomerId});
+                });
+            }
+        });
+    }
+    catch(ex) {
+        console.error('Internal Error: ' + ex);
+        return next(ex);
+    }
+});
+
 module.exports = router;

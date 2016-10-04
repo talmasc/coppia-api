@@ -96,4 +96,40 @@ router.post('/', function(req, res, next) {
     }
 });
 
+// CREATE INTERVIEW CUSTOMER
+router.post('/idea_snippet/', function(req, res, next) {
+    try {
+        var reqObj = req.body;
+        console.log(reqObj);
+        req.getConnection(function(err, conn) {
+            if (err) {
+                console.error('SQL Connection Error: ', err);
+                return next(err);
+            }
+            else {
+                var insertSql = "INSERT INTO idea_snippet SET ?";
+                var insertValues = {
+                    "idea_id" : reqObj.idea_id,
+                    "snippet_id" : reqObj.snippet_id
+                };
+
+                var query = conn.query(insertSql, insertValues, function(err, result) {
+                    if (err) {
+                        console.error('SQL Error: ', err);
+                        return next(err);
+                    }
+                    console.log(result);
+                    var InterviewSnippetId = result.insertId;
+                    res.json({"InterviewSnippetId":InterviewSnippetId});
+                });
+            }
+        });
+    }
+    catch(ex) {
+        console.error('Internal Error: ' + ex);
+        return next(ex);
+    }
+});
+
+
 module.exports = router;

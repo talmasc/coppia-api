@@ -29,7 +29,7 @@ router.get('/:snippet_id', function(req, res, next) {
 });
 
 // CREATE SNIPPET BY INTERVIEW ID
-router.post('/:interview_id', function(req, res, next) {
+router.post('/', function(req, res, next) {
     try {
         var reqObj = req.body;
         console.log(reqObj);
